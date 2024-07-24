@@ -7,9 +7,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from prettytable import PrettyTable
 import matplotlib.pyplot as plt
 import seaborn as sns
-from prettytable import PrettyTable
 
 df = pd.read_csv('drug.csv')
 
@@ -49,6 +49,14 @@ for model_name, model in models.items():
     print(confusion_matrix(y_test, y_pred))
     print(classification_report(y_test, y_pred))
 
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, fmt='d', cmap='Blues')
+    plt.title(f'{model_name} - Confusion Matrix')
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.savefig(f'{model_name}_confusion_matrix.png')
+    plt.close()
+
 table = PrettyTable()
 table.field_names = ["Model", "Accuracy"]
 
@@ -62,4 +70,4 @@ sns.barplot(x=list(results.keys()), y=list(results.values()))
 plt.title('Accuracy of Different Models')
 plt.ylabel('Accuracy')
 plt.xlabel('Model')
-plt.show()
+plt.close()
